@@ -42,7 +42,7 @@ function App() {
           })
             .then(res => setCompletedTasks(res.data.completedTasks))
 
-        ) : console.log("User data it's empty!"))
+        ) : console.log(res.data))
 
   }, [])
 
