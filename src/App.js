@@ -42,7 +42,7 @@ function App() {
           })
             .then(res => setCompletedTasks(res.data.completedTasks))
 
-        ) : console.log(res.data))
+        ) : console.log(res))
 
   }, [])
 
