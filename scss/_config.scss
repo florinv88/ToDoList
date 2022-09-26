@@ -1,0 +1,34 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
+
+// Variables
+$lightColor1: #edf2fb;
+$lightColor2: #e2eafc;
+$lightColor3: #d7e3fc;
+$mediumColor1: #ccdbfd;
+$mediumColor2: #c1d3fe;
+$mediumColor3: #b6ccfe;
+$backgroundColor : #84a9ff;
+$textColor : #000;
+
+$font-weights: (
+    "thin" : 100,
+    "light" : 300,
+    "regular" : 400,
+    "medium" : 500,
+    "bold" : 700
+);
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+@mixin animation1 {
+    transition: all 300ms ease-in-out
+}
+
+@function weight ($weight-name) {
+    @return map-get($font-weights, $weight-name);
+}

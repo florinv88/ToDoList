@@ -1,0 +1,35 @@
+.buttons {
+
+    margin-top: 3rem;
+    padding: 1rem;
+    width: 100%;
+    height: 60vh;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+
+    div {
+        width: 49.5%;
+        height: 100%;
+        border-radius: 5px;
+        background-color: $lightColor3;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        @include animation1;
+
+        &:hover {
+            background-color: $lightColor1;
+        }
+
+        a {
+            text-decoration: none;
+            color: $textColor;
+
+        }
+
+    }
+
+}

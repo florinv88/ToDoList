@@ -1,0 +1,14 @@
+@import './config', './header', './footer', './task', './registerPage', './intro';
+
+body {
+    background-color: $backgroundColor;
+}
+
+.mainPage {
+
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    padding: 3rem;
+
+}
