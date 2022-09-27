@@ -76,9 +76,9 @@ function App() {
     }
   }
 
-  const deleteActiveTask = (id) => {
+  const deleteActiveTask = async (id) => {
     //add to completed
-    axios({
+    await axios({
       method: "POST",
       data: {
         taskId: id
@@ -90,8 +90,8 @@ function App() {
     window.location.reload(true);
   }
 
-  const moveTaskToActive = (id) => {
-    axios({
+  const moveTaskToActive = async (id) => {
+    await axios({
       method: "POST",
       data: {
         taskId: id
@@ -107,7 +107,7 @@ function App() {
   const deleteTask = async (id) => {
 
     try {
-      axios({
+      await axios({
         method: "DELETE",
         data: {
           taskId: id
@@ -122,7 +122,6 @@ function App() {
     }
 
   }
-
 
 
   return (
