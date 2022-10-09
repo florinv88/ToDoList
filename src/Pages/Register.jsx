@@ -22,7 +22,7 @@ function Register() {
                     password: password
                 },
                 withCredentials: true,
-                url: "http://localhost:3001/registerUser"
+                url: "https://todolistfinalproduct.herokuapp.com/registerUser"
             })
                 .then(res => {
                     if (res.data === false) alert("The username is already used !")
