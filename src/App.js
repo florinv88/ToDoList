@@ -30,7 +30,7 @@ function App() {
           userId: Cookies.get("userID")
         },
         withCredentials: true,
-        url: "http://localhost:3001/getCurentUser"
+        url: "https://todolistfinalproduct.herokuapp.com/getCurentUser"
       })
         .then(res => {
           if (res.data !== null) {
@@ -41,7 +41,7 @@ function App() {
                 userId: Cookies.get("userID")
               },
               withCredentials: true,
-              url: "http://localhost:3001/getActiveTasks"
+              url: "https://todolistfinalproduct.herokuapp.com/getActiveTasks"
             })
               .then(res => setActiveTasks(res.data.activeTasks))
             axios({
@@ -50,7 +50,7 @@ function App() {
                 userId: Cookies.get("userID")
               },
               withCredentials: true,
-              url: "http://localhost:3001/getCompletedTasks"
+              url: "https://todolistfinalproduct.herokuapp.com/getCompletedTasks"
             })
               .then(res => setCompletedTasks(res.data.completedTasks))
 
@@ -76,7 +76,7 @@ function App() {
           userId: currentUser._id
         },
         withCredentials: true,
-        url: "http://localhost:3001/addActiveTask"
+        url: "https://todolistfinalproduct.herokuapp.com/addActiveTask"
       })
         .then(res => {
           if (res.data === false) alert("Smth got wrong.. please try again!")
@@ -97,7 +97,7 @@ function App() {
           taskID: id
         },
         withCredentials: true,
-        url: "http://localhost:3001/moveTaskToCompleted"
+        url: "https://todolistfinalproduct.herokuapp.com/moveTaskToCompleted"
       })
         .then(res => {
           if (res.data === false) alert("Smth got wrong.. please try again!")
@@ -118,7 +118,7 @@ function App() {
           userID: currentUser._id
         },
         withCredentials: true,
-        url: "http://localhost:3001/moveTaskToActive"
+        url: "https://todolistfinalproduct.herokuapp.com/moveTaskToActive"
       })
         .then(res => {
           if (res.data === false) alert("Smth got wrong.. please try again!")
@@ -138,7 +138,7 @@ function App() {
           taskID: id
         },
         withCredentials: true,
-        url: "http://localhost:3001/deleteTaskPerm"
+        url: "https://todolistfinalproduct.herokuapp.com/deleteTaskPerm"
       })
         .then(res => {
           if (res.data === false) alert("Smth got wrong.. please try again!")
