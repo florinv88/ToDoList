@@ -1,6 +1,7 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import Cookies from 'js-cookie'
 
 //Import files
 import Task from './components/Task'
@@ -13,7 +14,6 @@ import logout2 from './img/logout2.png'
 
 function App() {
 
-  const navigate = useNavigate()
   const [currentUser, setCurrentUser] = useState(null)
   const [isExpanded, setIsExpanded] = useState(false)
   const [completedTasks, setCompletedTasks] = useState([])
@@ -22,104 +22,130 @@ function App() {
 
 
   useEffect(() => {
-    axios({
-      method: "GET",
-      withCredentials: true,
-      url: "https://todolist-t1.herokuapp.com/getCurrentUser"
-    })
-      .then(res => res.data !== '' ?
-        (setCurrentUser(res.data),
-          axios({
-            method: "GET",
-            withCredentials: true,
-            url: "https://todolist-t1.herokuapp.com/currentActiveTasks"
-          })
-            .then(res => setActiveTasks(res.data.activeTasks)),
-          axios({
-            method: "GET",
-            withCredentials: true,
-            url: "https://todolist-t1.herokuapp.com/currentCompletedTasks"
-          })
-            .then(res => setCompletedTasks(res.data.completedTasks))
 
-        ) : console.log(res))
+    if (Cookies.get("userID") !== undefined) {
+      axios({
+        method: "POST",
+        data: {
+          userId: Cookies.get("userID")
+        },
+        withCredentials: true,
+        url: "http://localhost:3001/getCurentUser"
+      })
+        .then(res => {
+          if (res.data !== null) {
+            setCurrentUser(res.data)
+            axios({
+              method: "POST",
+              data: {
+                userId: Cookies.get("userID")
+              },
+              withCredentials: true,
+              url: "http://localhost:3001/getActiveTasks"
+            })
+              .then(res => setActiveTasks(res.data.activeTasks))
+            axios({
+              method: "POST",
+              data: {
+                userId: Cookies.get("userID")
+              },
+              withCredentials: true,
+              url: "http://localhost:3001/getCompletedTasks"
+            })
+              .then(res => setCompletedTasks(res.data.completedTasks))
 
+          }
+        })
+    }
   }, [])
-
-  console.log(completedTasks)
 
   ///////////////////////// Functions /////////////////////////
 
   const logoutUser = () => {
-    axios({
-      method: "GET",
-      withCredentials: true,
-      url: "https://todolist-t1.herokuapp.com/logout"
-    })
-    window.location.reload(true);
-
+    Cookies.remove("userID")
+    setCurrentUser(null)
   }
 
-  const addActiveTask = async () => {
-    if (newTask === '') alert('The task shouldn t be empty')
-    else {
-      await axios({
+
+  const addActiveTask = () => {
+    if (currentUser !== null)
+      axios({
         method: "POST",
         data: {
-          newActiveTask: newTask
+          newActiveTask: newTask,
+          userId: currentUser._id
         },
         withCredentials: true,
-        url: "https://todolist-t1.herokuapp.com/addActiveTask"
+        url: "http://localhost:3001/addActiveTask"
       })
-      setNewTask("")
-      window.location.reload(true);
-    }
-  }
-
-  const deleteActiveTask = async (id) => {
-    //add to completed
-    await axios({
-      method: "POST",
-      data: {
-        taskId: id
-      },
-      withCredentials: true,
-      url: "https://todolist-t1.herokuapp.com/moveTaskToCompleted"
-    })
-      .catch(err => console.log(err))
-    window.location.reload(true);
-  }
-
-  const moveTaskToActive = async (id) => {
-    await axios({
-      method: "POST",
-      data: {
-        taskId: id
-      },
-      withCredentials: true,
-      url: "https://todolist-t1.herokuapp.com/moveTaskToActive"
-    })
-      .catch(err => console.log(err))
-    window.location.reload(true);
+        .then(res => {
+          if (res.data === false) alert("Smth got wrong.. please try again!")
+          else {
+            setNewTask("")
+            window.location.reload(true)
+          }
+        })
 
   }
+  const deleteActiveTask = (id) => {
+    //move task to completed 
+    if (currentUser !== null)
+      axios({
+        method: "POST",
+        data: {
+          userID: currentUser._id,
+          taskID: id
+        },
+        withCredentials: true,
+        url: "http://localhost:3001/moveTaskToCompleted"
+      })
+        .then(res => {
+          if (res.data === false) alert("Smth got wrong.. please try again!")
+          else {
+            window.location.reload(true)
+          }
+        })
 
-  const deleteTask = async (id) => {
 
-    try {
-      await axios({
+  }
+
+  const moveTaskToActive = (id) => {
+    if (currentUser !== null)
+      axios({
+        method: "POST",
+        data: {
+          taskID: id,
+          userID: currentUser._id
+        },
+        withCredentials: true,
+        url: "http://localhost:3001/moveTaskToActive"
+      })
+        .then(res => {
+          if (res.data === false) alert("Smth got wrong.. please try again!")
+          else {
+            window.location.reload(true)
+          }
+        })
+
+  }
+
+
+  const deleteTask = (id) => {
+    if (currentUser !== null)
+      axios({
         method: "DELETE",
         data: {
-          taskId: id
+          taskID: id
         },
         withCredentials: true,
-        url: "https://todolist-t1.herokuapp.com/deleteTask"
+        url: "http://localhost:3001/deleteTaskPerm"
       })
-      window.location.reload(true);
-    }
-    catch {
-      console.log("err")
-    }
+        .then(res => {
+          if (res.data === false) alert("Smth got wrong.. please try again!")
+          else {
+            window.location.reload(true)
+          }
+        })
 
   }
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from 'axios'
-import { Routes, Route, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 
 function Register() {
@@ -16,16 +16,21 @@ function Register() {
         }
         else {
             axios({
-                method: "post",
+                method: "POST",
                 data: {
                     username: username,
                     password: password
                 },
                 withCredentials: true,
-                url: "https://todolist-t1.herokuapp.com/register"
+                url: "http://localhost:3001/registerUser"
             })
-                .then(res => console.log(res))
-            navigate('/login')
+                .then(res => {
+                    if (res.data === false) alert("The username is already used !")
+                    else {
+                        navigate('/login')
+                    }
+                })
+
         }
         setUsername("")
         setPassword("")

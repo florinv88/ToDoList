@@ -1,5 +1,6 @@
 import React from 'react'
 import axios from 'axios'
+import Cookies from 'js-cookie'
 
 import { useNavigate } from 'react-router-dom'
 
@@ -16,15 +17,21 @@ function Login() {
         }
         else {
             axios({
-                method: "post",
+                method: "POST",
                 data: {
                     username: username,
                     password: password
                 },
                 withCredentials: true,
-                url: "https://todolist-t1.herokuapp.com/login"
+                url: "http://localhost:3001/loginUser"
             })
-                .then(res => (console.log(res), navigate('/')))
+                .then(res => {
+                    if (res.data.valid === false) alert("Username or Password invalid !")
+                    else {
+                        Cookies.set("userID", `${res.data.id}`)
+                        navigate('/')
+                    }
+                })
         }
         setUsername("")
         setPassword("")
